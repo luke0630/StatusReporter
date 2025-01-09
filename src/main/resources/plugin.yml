@@ -1,0 +1,4 @@
+name: StatusReporter
+version: '1.0'
+main: org.luke.statusReporter.StatusReporter
+api-version: '1.21'
