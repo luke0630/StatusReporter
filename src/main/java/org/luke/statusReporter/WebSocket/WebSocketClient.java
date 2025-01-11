@@ -1,29 +1,45 @@
 package org.luke.statusReporter.WebSocket;
 
-import org.java_websocket.client.WebSocketClient;
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONObject;
+import org.luke.statusReporter.Sender;
 import org.luke.statusReporter.StatusReporter;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
-public class MyWebSocketClient extends WebSocketClient {
+import static org.bukkit.Bukkit.getServer;
 
-    public MyWebSocketClient(URI serverUri) {
+public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
+    static final double reconnectDuration = 1.5; // second
+
+    public WebSocketClient(URI serverUri) {
         super(serverUri);
     }
 
     @Override
     public void onOpen(ServerHandshake serverHandshake) {
-        System.out.println("Connected to server");
+        // 接続成功時にスケジューラーを停止
+        if (scheduler != null) {
+            scheduler.cancel();
+            scheduler = null; // スケジューラーをクリア
+        }
+        System.out.println("サーバーに接続しました");
 
         // サーバーにメッセージを送信
-        send("register test");
+        JSONObject json = new JSONObject();
+        json.put("port", getServer().getPort());
+        send(json.toString());
     }
 
     @Override
     public void onMessage(String message) {
-        // サーバーから受け取ったメッセージ
         System.out.println("Received from server: " + message);
+        if(message.equals("send")) {
+            Sender.Send();
+        }
     }
 
     @Override
@@ -38,29 +54,28 @@ public class MyWebSocketClient extends WebSocketClient {
 
     }
 
+    private static BukkitTask scheduler = null;
+
     // 再接続を試みるメソッド
-    private void attemptReconnect() {
-        new Thread(() -> {
-            try {
-                // 再接続の前に一定の待機時間を設ける
-                Thread.sleep((long) (1.5 * 1000));
-                System.out.println("接続を再試行します");
-                tryConnect();
-            } catch (InterruptedException e) {
-                System.out.println("cannot connect");
-            }
-        }).start();
+    private static void attemptReconnect() {
+        if(scheduler != null) return;
+        scheduler = Bukkit.getScheduler().runTaskLaterAsynchronously(StatusReporter.getInstance(), () -> {
+            System.out.println("接続を再試行します");
+            tryConnect();
+            scheduler.cancel();
+            scheduler = null;
+        }, (long) (reconnectDuration * 20L));
     }
 
     public static void tryConnect() {
         try {
-            StatusReporter.WebsocketInfo info = StatusReporter.getWebsocketServerInfo();
+            StatusReporter.WebsocketInfo info = StatusReporter.getWebsocketServerAddress();
             URI serverUri = new URI(String.format("ws://%s:%d", info.host(), info.port()));
-            MyWebSocketClient client = new MyWebSocketClient(serverUri);
-
+            WebSocketClient client = new WebSocketClient(serverUri);
+            client.setConnectionLostTimeout(300);
             client.connect();
-        } catch (Exception e) {
-            System.out.println("cannot connect");
+        } catch (URISyntaxException e) {
+            attemptReconnect();
         }
     }
 }
