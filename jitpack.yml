@@ -1,8 +1,4 @@
 jdk:
   - openjdk21
-commands:
-  install:
-    - mvn clean install -Dmaven.compiler.source=21 -Dmaven.compiler.target=21
-  build:
-    - mvn -N io.takari:maven:wrapper
-    - ./mvnw clean package
+maven:
+  version: 3.8.5
