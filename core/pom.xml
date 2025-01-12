@@ -111,9 +111,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.manager</groupId>
+            <groupId>com.github.luke0630</groupId>
             <artifactId>ServerManagerData</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>cce818ca0a</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
