@@ -57,6 +57,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -78,9 +82,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.manager</groupId>
+            <groupId>com.github.luke0630</groupId>
             <artifactId>ServerManagerData</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>cce818ca0a</version>
         </dependency>
         <dependency>
             <groupId>org.java-websocket</groupId>
