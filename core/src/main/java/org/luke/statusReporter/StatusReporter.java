@@ -27,7 +27,6 @@ public final class StatusReporter extends JavaPlugin {
         address_webServer = getConfig().getString("address");
 
         Sender.Register();
-
         getServer().getPluginManager().registerEvents(new EventManager(), this);
     }
 
