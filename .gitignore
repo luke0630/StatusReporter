@@ -1,4 +1,4 @@
-# User-specific stuff
+ # User-specific stuff
 .idea/
 
 *.iml
@@ -104,6 +104,7 @@ pom.xml.next
 
 release.properties
 core/dependency-reduced-pom.xml
+dist/dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar

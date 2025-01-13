@@ -64,9 +64,14 @@
                         <filter>
                             <artifact>*:*</artifact>
                             <excludes>
-                                <exclude>dev/dejvokep/**</exclude>
-                                <exclude>org/intellij/**</exclude>
-                                <exclude>org/jetbrains/**</exclude>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                                <exclude>META-INF/DEPENDENCIES</exclude>
+                                <exclude>META-INF/LICENSE</exclude>
+                                <exclude>META-INF/NOTICE</exclude>
+                                <exclude>**/pom.xml</exclude>
+                                <exclude>**/pom.properties</exclude>
                             </excludes>
                         </filter>
                     </filters>
