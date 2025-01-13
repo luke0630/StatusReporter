@@ -16,6 +16,7 @@
     <modules>
         <module>core</module>
         <module>api</module>
+        <module>dist</module>
     </modules>
 
     <build>
