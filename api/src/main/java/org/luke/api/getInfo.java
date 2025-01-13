@@ -8,18 +8,12 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-
 public class getInfo {
-    final String webURL;
-    public getInfo(String url) {
-        this.webURL = url;
-    }
-
-    public String get() {
+    public static String get() {
         try(HttpClient client = HttpClient.newHttpClient()) {
             // HttpClientの作成;
             // HTTPリクエストの作成
-            String url = String.format("http://%s/status", webURL);
+            String url = String.format("http://%s/status", StatusReporter.address_webServer);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))  // JSONを取得するURLに変更
                     .build();
