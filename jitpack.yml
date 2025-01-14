@@ -2,20 +2,3 @@ jdk:
   - openjdk21
 maven:
   version: 3.8.5
-
-#publish:
-#  included:
-#    - api
-#    - data
-#
-#install:
-#  - mvn install -N # 親プロジェクトのみインストール
-#
-#build:
-#  scripts:
-#    - - mvn install -Pjitpack
-#    - mvn -pl data,api -am install # 特定のモジュールのみビルド
-
-build:
-  scripts:
-    - mvn install -P jitpack

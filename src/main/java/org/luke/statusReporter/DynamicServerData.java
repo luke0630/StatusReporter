@@ -1,4 +1,4 @@
-package org.luke.statusreporter;
+package org.luke.statusReporter;
 
 import lombok.Getter;
 import lombok.Setter;

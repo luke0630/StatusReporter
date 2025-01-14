@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import org.luke.statusReporter.JSON.PlayersInfo;
 import org.luke.statusReporter.JSON.PluginsInfo;
 import org.luke.statusReporter.WebSocket.WebSocketClient;
-import org.luke.statusreporter.DynamicServerData;
 
 
 import java.io.IOException;

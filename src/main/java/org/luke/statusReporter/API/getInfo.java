@@ -1,10 +1,10 @@
-package org.luke.api;
+package org.luke.statusReporter.API;
 
 import com.google.gson.Gson;
 import lombok.experimental.UtilityClass;
 import org.json.JSONObject;
 import org.luke.statusReporter.StatusReporter;
-import org.luke.statusreporter.DynamicServerData;
+import org.luke.statusReporter.DynamicServerData;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -13,6 +13,9 @@ import java.net.http.HttpResponse;
 
 @UtilityClass
 public class getInfo {
+    public String testing() {
+        return "tesuto";
+    }
     public JSONObject getStatusJSON() {
         try(HttpClient client = HttpClient.newHttpClient()) {
             // HttpClientの作成;
