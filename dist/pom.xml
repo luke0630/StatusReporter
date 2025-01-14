@@ -74,15 +74,31 @@
                                 <exclude>**/pom.properties</exclude>
                             </excludes>
                         </filter>
+                        <filter>
+                            <artifact>org.java-websocket:Java-WebSocket</artifact>
+                            <excludes>
+                                <exclude>org/java_websocket/**</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <artifact>org.json:json</artifact>
+                            <excludes>
+                                <exclude>org/json/**</exclude>
+                            </excludes>
+                        </filter>
                     </filters>
                     <relocations>
+                        <relocation>
+                            <pattern>org.java_websocket</pattern>
+                            <shadedPattern>${relocation.package}org.java_websocket</shadedPattern>
+                        </relocation>
                         <relocation>
                             <pattern>org.json</pattern>
                             <shadedPattern>${relocation.package}org.json</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>org.manager.DynamicServerData</pattern>
-                            <shadedPattern>${relocation.package}org.manager.DynamicServerData</shadedPattern>
+                            <pattern>org.manager</pattern>
+                            <shadedPattern>${relocation.package}org.manager</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.java_websocket</pattern>

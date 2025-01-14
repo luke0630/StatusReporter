@@ -39,9 +39,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.luke0630</groupId>
-            <artifactId>ServerManagerData</artifactId>
-            <version>e629c85f04</version>
+            <groupId>org.luke.statusreporter</groupId>
+            <artifactId>data</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

@@ -17,6 +17,7 @@
         <module>core</module>
         <module>api</module>
         <module>dist</module>
+        <module>data</module>
     </modules>
 
     <build>
@@ -29,6 +30,12 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>org.json</groupId>
@@ -59,5 +66,4 @@
             <version>2.24.3</version>
         </dependency>
     </dependencies>
-    <!-- 親POMではモジュール間の依存関係を直接定義しません -->
 </project>
