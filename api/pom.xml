@@ -36,6 +36,7 @@
             <groupId>org.luke.statusreporter</groupId>
             <artifactId>core</artifactId>
             <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.luke.statusreporter</groupId>
