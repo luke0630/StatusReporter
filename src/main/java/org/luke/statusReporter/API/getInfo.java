@@ -12,6 +12,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class getInfo {
+    public String test() {
+        return "test";
+    }
     public JSONObject getStatusJSON() {
         try(HttpClient client = HttpClient.newHttpClient()) {
             // HttpClientの作成;

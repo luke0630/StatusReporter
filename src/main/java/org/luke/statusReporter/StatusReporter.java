@@ -18,15 +18,10 @@ public final class StatusReporter extends JavaPlugin {
     @Setter
     private static WebsocketInfo websocketServerAddress;
 
-    @Getter
-    private getInfo info;
-
     @Override
     public void onEnable() {
         // Plugin startup logic
         instance = this;
-
-        info = new getInfo();
 
         saveDefaultConfig();
 
