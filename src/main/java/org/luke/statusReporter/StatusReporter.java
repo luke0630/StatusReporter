@@ -19,7 +19,7 @@ public final class StatusReporter extends JavaPlugin {
     private static WebsocketInfo websocketServerAddress;
 
     @Getter
-    private static getInfo info;
+    private getInfo info;
 
     @Override
     public void onEnable() {
