@@ -34,6 +34,11 @@
     <dependencies>
         <dependency>
             <groupId>org.luke.statusreporter</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.luke.statusreporter</groupId>
             <artifactId>data</artifactId>
             <version>1.0</version>
             <scope>provided</scope>

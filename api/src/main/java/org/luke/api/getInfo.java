@@ -1,7 +1,9 @@
 package org.luke.api;
 
 import com.google.gson.Gson;
+import lombok.experimental.UtilityClass;
 import org.json.JSONObject;
+import org.luke.statusReporter.StatusReporter;
 import org.luke.statusreporter.DynamicServerData;
 
 import java.net.URI;
@@ -9,18 +11,13 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+@UtilityClass
 public class getInfo {
-    private final String address;
-
-    public getInfo(String address) {
-        this.address = address;
-    }
-
     public JSONObject getStatusJSON() {
         try(HttpClient client = HttpClient.newHttpClient()) {
             // HttpClientの作成;
             // HTTPリクエストの作成
-            String url = String.format("http://%s/status", address);
+            String url = String.format("http://%s/status", StatusReporter.address_webServer);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))  // JSONを取得するURLに変更
                     .build();
