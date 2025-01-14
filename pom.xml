@@ -24,6 +24,7 @@
             </activation>
             <modules>
                 <module>data</module>
+                <module>core</module>
                 <module>api</module>
             </modules>
         </profile>
