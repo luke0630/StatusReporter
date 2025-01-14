@@ -3,6 +3,7 @@ package org.luke.statusReporter;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.luke.statusReporter.API.getInfo;
 
 public final class StatusReporter extends JavaPlugin {
 
@@ -17,10 +18,15 @@ public final class StatusReporter extends JavaPlugin {
     @Setter
     private static WebsocketInfo websocketServerAddress;
 
+    @Getter
+    private static getInfo info;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
         instance = this;
+
+        info = new getInfo();
 
         saveDefaultConfig();
 

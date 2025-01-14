@@ -11,11 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-@UtilityClass
 public class getInfo {
-    public String testing() {
-        return "tesuto";
-    }
     public JSONObject getStatusJSON() {
         try(HttpClient client = HttpClient.newHttpClient()) {
             // HttpClientの作成;
