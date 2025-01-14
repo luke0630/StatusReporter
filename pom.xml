@@ -13,12 +13,33 @@
         <relocation.package>${project.groupId}.${project.artifactId}.packages.</relocation.package>
     </properties>
 
-    <modules>
-        <module>core</module>
-        <module>api</module>
-        <module>dist</module>
-        <module>data</module>
-    </modules>
+    <profiles>
+        <profile>
+            <id>jitpack</id>
+            <activation>
+                <property>
+                    <name>env.JITPACK</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <modules>
+                <module>data</module>
+                <module>api</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>data</module>
+                <module>api</module>
+                <module>core</module>
+                <module>dist</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
