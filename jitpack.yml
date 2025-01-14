@@ -8,4 +8,4 @@ publish:
     - api
     - data
 install:
-  - mvn -pl api,core -am install
+  - mvn -pl api,data -am install
