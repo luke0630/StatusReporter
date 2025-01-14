@@ -7,5 +7,11 @@ publish:
   included:
     - api
     - data
-install:
-  - mvn -pl api,data -am install
+#install:
+#  - mvn -pl api,data -am install
+#
+
+build:
+  scripts:
+    - cd data && mvn install
+    - cd api && mvn install
