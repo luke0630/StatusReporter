@@ -6,5 +6,6 @@ maven:
 publish:
   included:
     - api
+    - data
 install:
   - mvn -pl api,core -am install
