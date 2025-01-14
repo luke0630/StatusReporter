@@ -8,6 +8,9 @@ publish:
     - api
     - data
 
+install:
+  - mvn install -N # 親プロジェクトのみインストール
+
 build:
   scripts:
-    - mvn -pl api,data install
+    - mvn -pl data,api -am install # 特定のモジュールのみビルド
