@@ -10,12 +10,16 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 
+@UtilityClass
 public class getInfo {
-    public String test() {
-        return "test";
+    public static void isOnline(String serverName) {
+        JSONObject status = new JSONObject(getStatusJSON());
+        status.getBoolean(serverName);
     }
-    public JSONObject getStatusJSON() {
+    public String getStatusJSON() {
         try(HttpClient client = HttpClient.newHttpClient()) {
             // HttpClientの作成;
             // HTTPリクエストの作成
@@ -32,7 +36,7 @@ public class getInfo {
                 // レスポンスボディをJSONとしてパース
                 String responseBody = response.body();
 
-                return new JSONObject(responseBody);
+                return String.valueOf(new JSONObject(responseBody));
             } else {
                 System.out.println("HTTP Error: " + response.statusCode());
             }
@@ -41,15 +45,40 @@ public class getInfo {
         }
         return null;
     }
+    public List<DynamicServerData> getStatusList() {
+        String string_status = getStatusJSON();
+
+        List<DynamicServerData> list = new ArrayList<>();
+
+        if(!string_status.isEmpty()) {
+            JSONObject status = new JSONObject(string_status);
+
+            for(String key : status.keySet()) {
+                JSONObject serverStatus = status.getJSONObject(key);
+                JSONObject serverData = serverStatus.getJSONObject("serverData");
+
+                Gson gson = new Gson();
+                DynamicServerData data = gson.fromJson(serverData.toString(), DynamicServerData.class);
+                list.add( data );
+            }
+        }
+        return list;
+    }
     public DynamicServerData getStatusByServerData(String serverName) {
+         String string_status = getStatusJSON();
+         if(string_status != null) {
+             JSONObject status = new JSONObject(string_status);
 
-         JSONObject status = getStatusJSON();
-         if(status != null) {
-            status.getJSONObject(serverName);
-
-            Gson gson = new Gson();
-            return gson.fromJson(status.toString() ,DynamicServerData.class);
+             for(String key :  status.keySet()) {
+                 JSONObject json_serverData = status.getJSONObject(key);
+                 JSONObject serverData = json_serverData.getJSONObject("serverData");
+                 if(serverData.getString("serverName").equals(serverName)) {
+                     Gson gson = new Gson();
+                     return gson.fromJson(serverData.toString(), DynamicServerData.class);
+                 }
+             }
          }
          return null;
     }
 }
+

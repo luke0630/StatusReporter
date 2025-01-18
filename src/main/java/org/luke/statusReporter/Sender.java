@@ -63,8 +63,9 @@ public class Sender {
             );
 
             StatusReporter.setWebsocketServerAddress(info);
-            WebSocketClient.tryConnect();
+            StatusReporter.Websocket_ConnectToServer();
         } catch (IOException | InterruptedException e) {
+            System.out.println(e);
             attemptReconnect();
         }
     }
@@ -75,6 +76,7 @@ public class Sender {
         Gson gson = new Gson();
         DynamicServerData resultData = new DynamicServerData();
         resultData.setServerName(myServerName);
+        resultData.setStatus(StatusReporter.getServerStatus());
         resultData.setPlugins(PluginsInfo.get());
         resultData.setPlayers(PlayersInfo.get());
 
@@ -88,11 +90,6 @@ public class Sender {
                     .timeout(Duration.ofSeconds(10))
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            getServer().getLogger().info(String.format(
-                    "%s  %s",
-                    response.statusCode(),
-                    response.body()
-            ));
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Error sending request", e);
         }
