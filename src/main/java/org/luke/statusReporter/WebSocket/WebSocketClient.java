@@ -43,9 +43,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
         String[] split_message = message.split(" ");
         if(split_message.length == 2) {
             switch(MessageType.valueOf(split_message[0])) {
-                case REGISTER -> {
-                    getServer().broadcastMessage(split_message[1] + " が起動中です");
-                }
+                case REGISTER -> getServer().broadcastMessage(split_message[1] + " が起動中です");
                 case STARTED -> {
                     for(Player player : Bukkit.getOnlinePlayers()) {
                         Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
@@ -59,9 +57,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
                     }
                     getServer().broadcastMessage(split_message[1] + " が起動しました。");
                 }
-                case CLOSED -> {
-                    getServer().broadcastMessage(split_message[1] + " が終了しました。");
-                }
+                case CLOSED -> getServer().broadcastMessage(split_message[1] + " が終了しました。");
             }
         }
         if(message.equals("send")) {
