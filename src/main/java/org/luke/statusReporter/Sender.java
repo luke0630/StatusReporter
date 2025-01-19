@@ -3,9 +3,9 @@ package org.luke.statusReporter;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.json.JSONObject;
+import org.luke.statusReporter.Data.DynamicServerData;
 import org.luke.statusReporter.JSON.PlayersInfo;
 import org.luke.statusReporter.JSON.PluginsInfo;
-import org.luke.statusReporter.WebSocket.WebSocketClient;
 
 
 import java.io.IOException;

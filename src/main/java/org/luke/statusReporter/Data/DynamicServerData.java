@@ -1,7 +1,8 @@
-package org.luke.statusReporter;
+package org.luke.statusReporter.Data;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.luke.statusReporter.StatusReporter;
 
 import java.util.List;
 

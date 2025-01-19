@@ -4,15 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.luke.statusReporter.API.getInfo;
+
 import org.luke.statusReporter.Command.CommandManager;
 import org.luke.statusReporter.Placeholder.StatusExpansion;
 import org.luke.statusReporter.WebSocket.WebSocketClient;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.concurrent.CountDownLatch;
-
 public final class StatusReporter extends JavaPlugin {
 
     @Getter

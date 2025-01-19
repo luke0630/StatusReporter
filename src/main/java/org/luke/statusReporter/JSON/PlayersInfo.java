@@ -2,7 +2,7 @@ package org.luke.statusReporter.JSON;
 
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.luke.statusReporter.DynamicServerData;
+import org.luke.statusReporter.Data.DynamicServerData;
 
 import java.util.ArrayList;
 import java.util.List;

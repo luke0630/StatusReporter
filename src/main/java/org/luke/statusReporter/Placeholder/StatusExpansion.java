@@ -5,10 +5,6 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.luke.statusReporter.API.getInfo;
-import org.luke.statusReporter.DynamicServerData;
-
-import java.util.List;
-
 
 public class StatusExpansion extends PlaceholderExpansion {
     @Override
