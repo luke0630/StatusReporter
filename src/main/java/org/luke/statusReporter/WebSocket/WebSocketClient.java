@@ -96,11 +96,11 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     public void sendMessageToServer(MessageType type, String message) {
         if (isOpen()) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", type.name());
+            jsonObject.put("content", message);
             getLogger().info(type + " " + message);
-            send(String.format("%s %s",
-                    type.name(),
-                    message
-            ));
+            send(jsonObject.toString());
         } else {
             System.out.println("Connection is not open. Unable to send message.");
         }
