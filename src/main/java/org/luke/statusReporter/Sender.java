@@ -80,6 +80,12 @@ public class Sender {
         resultData.setPlugins(PluginsInfo.get());
         resultData.setPlayers(PlayersInfo.get());
 
+        String[] split = StatusReporter.getInstance().getServer().getBukkitVersion().split("-");
+        String version = split[0];
+        resultData.setVersion(version);
+
+        Bukkit.broadcastMessage(version);
+
         String jsonPayload = gson.toJson(resultData);
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest request = HttpRequest.newBuilder()
