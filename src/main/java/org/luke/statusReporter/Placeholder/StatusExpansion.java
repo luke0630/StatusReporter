@@ -1,10 +1,13 @@
 package org.luke.statusReporter.Placeholder;
 
+import com.google.gson.Gson;
 import org.bukkit.OfflinePlayer;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.luke.statusReporter.API.getInfo;
+import org.luke.statusReporter.Data.DynamicServerData;
+import org.luke.statusReporter.StatusReporter;
 
 public class StatusExpansion extends PlaceholderExpansion {
     @Override
@@ -26,20 +29,37 @@ public class StatusExpansion extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         JSONObject status = new JSONObject(getInfo.getStatusJSON());
 
+        String[] args = params.split("_");
         for(String serverName : status.keySet()) {
-            if(serverName.equals(params)) {
+            if(serverName.equals(args[0])) {
                 JSONObject serverStatus = status.getJSONObject(serverName);
                 if(serverStatus.getBoolean("isOnline")) {
-                    return switch(getInfo.getStatusByServerData(serverName).getStatus()) {
-                        case RUNNING -> "稼働中";
-                        case STARTING -> "起動中";
-                        default -> "";
-                    };
+                    DynamicServerData serverData = new Gson().fromJson(serverStatus.getJSONObject("serverData").toString(), DynamicServerData.class);
+                    return getStatus(serverData, args);
+                } else if(args.length == 1) {
+                    return StatusReporter.getData().getPlaceholderMessage().getStatus_offline();
                 } else {
-                    return "オフラインです";
+                    return "";
                 }
             }
         }
         return "そのサーバーは存在しません。";
+    }
+
+    private String getStatus(DynamicServerData serverStatus, String[] args) {
+        if(args.length == 1) {
+            return switch(serverStatus.getStatus()) {
+                case RUNNING -> StatusReporter.getData().getPlaceholderMessage().getStatus_online();
+                case STARTING -> StatusReporter.getData().getPlaceholderMessage().getStarting();
+                default -> "";
+            };
+        } else if(args.length == 2) {
+            return switch(args[1]) {
+                case "playerscount" -> String.valueOf(serverStatus.getPlayers().size());
+                case "version" -> serverStatus.getVersion();
+                default -> "";
+            };
+        }
+        return "";
     }
 }
