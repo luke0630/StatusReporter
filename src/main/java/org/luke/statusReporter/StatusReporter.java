@@ -19,9 +19,7 @@ public final class StatusReporter extends JavaPlugin {
 
     @Getter
     private static StatusReporter instance;
-
     public static String address_webServer;
-
     public record WebsocketInfo(String host, Integer port) {}
 
     @Getter
