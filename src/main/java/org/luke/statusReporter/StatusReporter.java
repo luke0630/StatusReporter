@@ -3,14 +3,19 @@ package org.luke.statusReporter;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.luke.statusReporter.Command.CommandManager;
+import org.luke.statusReporter.Data.ConfigData;
 import org.luke.statusReporter.Placeholder.StatusExpansion;
 import org.luke.statusReporter.WebSocket.WebSocketClient;
 
 import java.net.URI;
+
 public final class StatusReporter extends JavaPlugin {
+    @Getter
+    private static ConfigData data;
 
     @Getter
     private static StatusReporter instance;
