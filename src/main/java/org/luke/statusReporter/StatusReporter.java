@@ -43,9 +43,15 @@ public final class StatusReporter extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         instance = this;
+        saveDefaultConfig();
+        Load();
+
+        Sender.Register();
+        getServer().getPluginManager().registerEvents(new EventManager(), this);
+        getServer().getPluginCommand("statusreporter").setExecutor(new CommandManager());
 
         getServer().getScheduler().runTask(this, () -> {
-            // サーバーが完全に起動したらRUNNING
+            // サーバーが完全に起動したらステータスを移行
             setServerStatus(ServerStatus.RUNNING);
             webSocketClient.sendMessageToServer(WebSocketClient.MessageType.STARTED, "");
 
@@ -53,16 +59,6 @@ public final class StatusReporter extends JavaPlugin {
                 new StatusExpansion().register();
             }
         });
-
-        saveDefaultConfig();
-
-        address_webServer = getConfig().getString("address");
-
-        getLogger().info(address_webServer);
-
-        Sender.Register();
-        getServer().getPluginManager().registerEvents(new EventManager(), this);
-        getServer().getPluginCommand("statusreporter").setExecutor(new CommandManager());
     }
 
     public static void Websocket_ConnectToServer() {
