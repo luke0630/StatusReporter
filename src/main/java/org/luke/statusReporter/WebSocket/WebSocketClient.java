@@ -6,8 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
+import org.luke.statusReporter.Data.ConfigData;
 import org.luke.statusReporter.Sender;
 import org.luke.statusReporter.StatusReporter;
+import org.luke.takoyakiLibrary.TakoUtility;
 
 import java.net.URI;
 
@@ -42,27 +44,44 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
     public void onMessage(String message) {
         String[] split_message = message.split(" ");
         if(split_message.length == 2) {
-            switch(MessageType.valueOf(split_message[0])) {
-                case REGISTER -> getServer().broadcastMessage(split_message[1] + " が起動中です");
-                case STARTED -> {
-                    for(Player player : Bukkit.getOnlinePlayers()) {
-                        Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
-                            player.getWorld().playSound(
-                                    player.getLocation(),
-                                    Sound.ENTITY_PLAYER_LEVELUP,
-                                    1,
-                                    1
-                            );
-                        });
-                    }
-                    getServer().broadcastMessage(split_message[1] + " が起動しました。");
-                }
-                case CLOSED -> getServer().broadcastMessage(split_message[1] + " が終了しました。");
+            ConfigData.MessageStatus MessageStatus = StatusReporter.getData().getMessageStatus();
+
+            if(!MessageStatus.getMessageSwitch()) return;
+            MessageType type = MessageType.valueOf(split_message[0]);
+            String serverName = split_message[1];
+
+            // フィルターが有効
+            if(MessageStatus.getFilterSwitch()) {
+                if(!MessageStatus.getFilter_servers().contains(serverName)) return; // フィルターリストにサーバーの名前が存在しなかった場合メッセージを送信しません
             }
+
+            String statusMessage = getStatusMessage(type);
+            getServer().broadcastMessage(TakoUtility.toColor(String.format(statusMessage, serverName)));
         }
         if(message.equals("send")) {
             Sender.Send();
         }
+    }
+
+    String getStatusMessage(MessageType type) {
+        ConfigData.MessageData messageData = StatusReporter.getData().getMessageStatus().getMessageData();
+        if(type == MessageType.STARTED) {
+            for(Player player : Bukkit.getOnlinePlayers()) {
+                Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
+                    player.getWorld().playSound(
+                            player.getLocation(),
+                            Sound.ENTITY_PLAYER_LEVELUP,
+                            1,
+                            1
+                    );
+                });
+            }
+        }
+        return switch(type) {
+            case REGISTER -> messageData.getStarting();
+            case STARTED -> messageData.getStarted();
+            case CLOSED -> messageData.getClosed();
+        };
     }
 
     @Override
