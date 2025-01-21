@@ -87,4 +87,43 @@ public final class StatusReporter extends JavaPlugin {
 
         StatusReporter.setServerStatus(ServerStatus.SHUTTING_DOWN);
     }
+
+    final String messageStatusPath = "messageStatus.";
+    final String messageListPath = "messageStatus.message.";
+
+    final String placeholderMessagePath = "placeholder-message.";
+    public void Load() {
+        FileConfiguration config = getConfig();
+        address_webServer = config.getString("address");
+
+        ConfigData configData = new ConfigData();
+
+        //////////// messageStatus ////////////
+        ConfigData.MessageStatus messageStatus = new ConfigData.MessageStatus();
+        ConfigData.MessageData messageData = new ConfigData.MessageData();
+
+        messageData.setStarting(config.getString(messageListPath + "starting"));
+        messageData.setStarted(config.getString(messageListPath + "started"));
+        messageData.setClosed(config.getString(messageListPath + "closed"));
+
+        messageStatus.setMessageSwitch(config.getBoolean(messageStatusPath + "switch"));
+        messageStatus.setFilterSwitch(config.getBoolean(messageStatusPath + "filter"));
+        messageStatus.setFilter_servers(config.getStringList(messageStatusPath + "filter-list"));
+        messageStatus.setMessageData(messageData);
+        //////////// messageStatus ////////////
+
+        //////////// PlaceholderMessage ////////////
+        ConfigData.PlaceholderMessage placeholderMessage = new ConfigData.PlaceholderMessage();
+
+        String online_path = placeholderMessagePath + "online.";
+        String offline_path = placeholderMessagePath + "offline.";
+        placeholderMessage.setStatus_online(config.getString(online_path + "status"));
+        placeholderMessage.setStarting(config.getString(online_path + "starting"));
+        placeholderMessage.setStatus_offline(config.getString(offline_path + "status"));
+        //////////// PlaceholderMessage ////////////
+
+        configData.setMessageStatus(messageStatus);
+        configData.setPlaceholderMessage(placeholderMessage);
+        data = configData;
+    }
 }
