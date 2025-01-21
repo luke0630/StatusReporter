@@ -1,1 +1,23 @@
 address: localhost:8888
+
+placeholder-message:
+  online:
+    status: "&a&lオンライン (稼働中)"
+    starting: "&6起動中"
+  offline:
+    status: "&6オフライン (停止中)"
+
+# プレイヤーにサーバーのステータスを知らせる
+messageStatus:
+  switch: true
+
+  # ステータスメッセージのカスタム
+  message:
+    starting: "&6%sが起動中です。"
+    started: "&a%sが起動しました。"
+    closed: "&c%sが終了しました。"
+
+  # 特定のサーバーのステータスを知らせる場合
+  # filterをtrueにし、知らせたいサーバーの名前を記述してください
+  filter: false
+  filter-list:
