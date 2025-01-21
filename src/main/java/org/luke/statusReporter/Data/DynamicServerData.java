@@ -11,6 +11,7 @@ import java.util.List;
 public class DynamicServerData {
     private String serverName = "";
     private StatusReporter.ServerStatus status;
+    private String version;
     private List<PluginInfo> plugins;
     private List<PlayerData> players;
 
