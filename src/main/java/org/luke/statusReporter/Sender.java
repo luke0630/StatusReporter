@@ -84,8 +84,6 @@ public class Sender {
         String version = split[0];
         resultData.setVersion(version);
 
-        Bukkit.broadcastMessage(version);
-
         String jsonPayload = gson.toJson(resultData);
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest request = HttpRequest.newBuilder()
