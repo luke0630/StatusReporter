@@ -32,7 +32,7 @@ public final class StatusReporter extends JavaPlugin {
     public enum ServerStatus {
         STARTING, // サーバーが起動中
         RUNNING, // 起動完了（動作中）
-        SHUTTING_DOWN; // シャットダウン中
+        SHUTTING_DOWN, // シャットダウン中
     }
 
     @Getter
