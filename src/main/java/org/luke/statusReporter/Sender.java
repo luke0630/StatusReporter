@@ -116,5 +116,20 @@ public class Sender {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Error sending request", e);
         }
+
+    public static CompletableFuture<Boolean> isServerOnline(String url, int timeoutSeconds) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .timeout(Duration.ofSeconds(timeoutSeconds))
+                .build();
+
+        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> {
+                    int statusCode = response.statusCode();
+                    System.out.println(statusCode);
+                    return statusCode >= 200 && statusCode < 400;
+                })
+                .exceptionally(e -> false);
     }
 }
