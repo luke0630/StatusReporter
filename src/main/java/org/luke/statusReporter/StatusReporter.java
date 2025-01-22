@@ -53,6 +53,10 @@ public final class StatusReporter extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EventManager(), this);
         getServer().getPluginCommand("statusreporter").setExecutor(new CommandManager());
 
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new StatusExpansion().register();
+        }
+
         getServer().getScheduler().runTask(this, () -> {
             // サーバーが完全に起動したらステータスを移行
             setServerStatus(ServerStatus.RUNNING);
