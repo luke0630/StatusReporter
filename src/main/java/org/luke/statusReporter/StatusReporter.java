@@ -57,10 +57,6 @@ public final class StatusReporter extends JavaPlugin {
             // サーバーが完全に起動したらステータスを移行
             setServerStatus(ServerStatus.RUNNING);
             webSocketClient.sendMessageToServer(WebSocketClient.MessageType.STARTED, "");
-
-            if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-                new StatusExpansion().register();
-            }
         });
     }
 
