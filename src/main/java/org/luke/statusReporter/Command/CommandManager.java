@@ -1,39 +1,27 @@
 package org.luke.statusReporter.Command;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.luke.statusReporter.API.getInfo;
 import org.luke.statusReporter.Data.DynamicServerData;
-import org.luke.statusReporter.StatusReporter;
+import org.luke.statusReporter.Sender;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+
+import static org.luke.takoyakiLibrary.TakoUtility.toColor;
 
 public class CommandManager implements CommandExecutor {
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        CompletableFuture.runAsync(() -> {
-            if(strings[0].equals("list")) {
-                List<DynamicServerData> list = getInfo.getStatusList();
-                for(DynamicServerData serverData : list) {
-                    commandSender.sendMessage(serverData.getServerName());
-                }
-            } else {
-                String jsonResponse = getInfo.getStatusJSON();
-                if (jsonResponse != null) {
-                    // メインスレッドでメッセージを送信
-                    Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
-                        commandSender.sendMessage(jsonResponse);
-                    });
-                } else {
-                    Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
-                        commandSender.sendMessage("Failed to fetch server status.");
-                    });
-                }
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] strings) {
+        if(strings[0].equals("reconnect")) {
+            if(commandSender instanceof Player player) {
+                player.sendMessage(toColor("&c接続を再試行しています。 詳細はコンソールを確認してください。"));
             }
-        });
+            Sender.Register();
+        }
         if(strings[0].equals("list")) {
             List<DynamicServerData> list = getInfo.getStatusList();
             for(DynamicServerData serverData : list) {
