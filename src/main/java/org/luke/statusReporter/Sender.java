@@ -29,27 +29,34 @@ public class Sender {
     }
 
     public static void Register() {
-        System.out.println("接続します");
+        System.out.println("接続しています");
         String url = String.format("http://%s/register", StatusReporter.address_webServer);
 
         JSONObject serverJSON = new JSONObject();
-
         serverJSON.put("port", getPort());
 
         String jsonPayload = serverJSON.toString();
-        try (HttpClient client = HttpClient.newHttpClient()) {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json; charset=UTF-8")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
-                    .timeout(Duration.ofSeconds(10))
-                    .build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            getServer().getLogger().info(String.format(
-                    "%s  %s",
-                    response.statusCode(),
-                    response.body()
-            ));
+        if(client == null) {
+            client = HttpClient.newHttpClient();
+        }
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json; charset=UTF-8")
+                .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                .timeout(Duration.ofSeconds(timeout))
+                .build();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenAcceptAsync(response -> {
+                    try {
+                        Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
+                            getServer().getLogger().info(String.format(
+                                    "%s  %s",
+                                    response.statusCode(),
+                                    response.body()
+                            ));
+                        });
 
             JSONObject jsonObject = new JSONObject(response.body());
             String address = jsonObject.getString("host");
