@@ -27,23 +27,29 @@ public class StatusExpansion extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
-        JSONObject status = new JSONObject(getInfo.getStatusJSON());
-
-        String[] args = params.split("_");
-        for(String serverName : status.keySet()) {
-            if(serverName.equals(args[0])) {
-                JSONObject serverStatus = status.getJSONObject(serverName);
-                if(serverStatus.getBoolean("isOnline")) {
-                    DynamicServerData serverData = new Gson().fromJson(serverStatus.getJSONObject("serverData").toString(), DynamicServerData.class);
-                    return getStatus(serverData, args);
-                } else if(args.length == 1) {
-                    return StatusReporter.getData().getPlaceholderMessage().getStatus_offline();
-                } else {
-                    return "";
+        try {
+            // 非同期処理の結果を同期的に取得
+            String stringStatus = getInfo.getStatusJSON().get();
+            JSONObject status = new JSONObject(stringStatus);
+            String[] args = params.split("_");
+            for (String serverName : status.keySet()) {
+                if (serverName.equals(args[0])) {
+                    JSONObject serverStatus = status.getJSONObject(serverName);
+                    if (serverStatus.getBoolean("isOnline")) {
+                        DynamicServerData serverData = new Gson().fromJson(serverStatus.getJSONObject("serverData").toString(), DynamicServerData.class);
+                        return getStatus(serverData, args);
+                    } else if (args.length == 1) {
+                        return StatusReporter.getData().getPlaceholderMessage().getStatus_offline();
+                    } else {
+                        return "";
+                    }
                 }
             }
+            return "そのサーバーは存在しません。";
+        } catch (Exception e) {
+            // エラーが発生した場合の処理
+            return "エラーが発生しました: " + e.getMessage();
         }
-        return "そのサーバーは存在しません。";
     }
 
     private String getStatus(DynamicServerData serverStatus, String[] args) {
