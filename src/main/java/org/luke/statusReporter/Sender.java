@@ -58,25 +58,34 @@ public class Sender {
                             ));
                         });
 
-            JSONObject jsonObject = new JSONObject(response.body());
-            String address = jsonObject.getString("host");
-            Integer port = jsonObject.getInt("port");
-            myServerName = jsonObject.getString("name");
+                        JSONObject jsonObject = new JSONObject(response.body());
+                        String address = jsonObject.getString("host");
+                        Integer port = jsonObject.getInt("port");
+                        myServerName = jsonObject.getString("name");
 
-            StatusReporter.WebsocketInfo info = new StatusReporter.WebsocketInfo(
-                    address,
-                    port
-            );
+                        StatusReporter.WebsocketInfo info = new StatusReporter.WebsocketInfo(
+                                address,
+                                port
+                        );
 
-            StatusReporter.setWebsocketServerAddress(info);
-            StatusReporter.Websocket_ConnectToServer();
-        } catch (IOException e) {
-            getLogger().info("サーバーに接続できませんでした。オフラインの可能性があります。 接続を試みる場合/status reconnect を使用してください  接続先: " + url);
-        } catch (InterruptedException e) {
-            getLogger().info("リクエストが中断されました");
-            getLogger().info("詳細: " + e);
-            attemptReconnect();
-        }
+                        StatusReporter.setWebsocketServerAddress(info);
+                        StatusReporter.Websocket_ConnectToServer();
+                    } catch (Exception e) {
+                        Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
+                            getLogger().warning("非同期タスクでエラーが発生しました: " + e.getMessage());
+                        });
+                    }
+                })
+                .exceptionally(ex -> {
+                    Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
+                        getLogger().info("サーバーに接続できませんでした。詳細: " + ex.getMessage());
+                        getLogger().info("接続先: " + url);
+                    });
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(StatusReporter.getInstance(),
+                            Sender::Register, timeout * 20L
+                    );
+                    return null;
+                });
     }
 
 
