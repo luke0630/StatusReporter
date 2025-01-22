@@ -5,6 +5,8 @@ api-version: '1.21'
 author: Luke0630
 load: STARTUP
 
+softdepend:  [PlaceholderAPI]
+
 commands:
   statusreporter:
     aliases:
