@@ -12,6 +12,7 @@ import org.luke.statusReporter.Placeholder.StatusExpansion;
 import org.luke.statusReporter.WebSocket.WebSocketClient;
 
 import java.net.URI;
+import java.util.Objects;
 
 public final class StatusReporter extends JavaPlugin {
     @Getter
@@ -51,11 +52,7 @@ public final class StatusReporter extends JavaPlugin {
 
         Sender.Register();
         getServer().getPluginManager().registerEvents(new EventManager(), this);
-        getServer().getPluginCommand("statusreporter").setExecutor(new CommandManager());
-
-        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new StatusExpansion().register();
-        }
+        Objects.requireNonNull(getServer().getPluginCommand("statusreporter")).setExecutor(new CommandManager());
 
         getServer().getScheduler().runTask(this, () -> {
             // サーバーが完全に起動したらステータスを移行
