@@ -12,72 +12,73 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @UtilityClass
 public class getInfo {
-    public static void isOnline(String serverName) {
-        JSONObject status = new JSONObject(getStatusJSON());
-        status.getBoolean(serverName);
+    public CompletableFuture<String> getStatusJSON() {
+        HttpClient client = HttpClient.newHttpClient();
+
+        String url = String.format("http://%s/status", StatusReporter.address_webServer);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+
+        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> {
+                    if (response.statusCode() == 200) {
+                        String responseBody = response.body();
+                        if (responseBody == null || responseBody.isEmpty()) {
+                            throw new IllegalStateException("Empty response body received.");
+                        }
+                        return responseBody;
+                    } else {
+                        throw new RuntimeException("HTTP Error: " + response.statusCode());
+                    }
+                })
+                .exceptionally(e -> {
+                    System.err.println(e.getMessage());
+                    return "{}";
+                });
     }
-    public String getStatusJSON() {
-        try(HttpClient client = HttpClient.newHttpClient()) {
-            // HttpClientの作成;
-            // HTTPリクエストの作成
-            String url = String.format("http://%s/status", StatusReporter.address_webServer);
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))  // JSONを取得するURLに変更
-                    .build();
 
-            // HTTPレスポンスの取得
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    public List<DynamicServerData> getStatusList() {
+        getStatusJSON().thenApply(json -> {
+            List<DynamicServerData> list = new ArrayList<>();
 
-            // レスポンスのステータスコードを確認
-            if (response.statusCode() == 200) {
-                // レスポンスボディをJSONとしてパース
-                String responseBody = response.body();
+            if(!json.isEmpty()) {
+                JSONObject status = new JSONObject(json);
 
-                return String.valueOf(new JSONObject(responseBody));
-            } else {
-                System.out.println("HTTP Error: " + response.statusCode());
+                for(String key : status.keySet()) {
+                    JSONObject serverStatus = status.getJSONObject(key);
+                    JSONObject serverData = serverStatus.getJSONObject("serverData");
+
+                    Gson gson = new Gson();
+                    DynamicServerData data = gson.fromJson(serverData.toString(), DynamicServerData.class);
+                    list.add( data );
+                }
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+            return list;
+        });
         return null;
     }
-    public List<DynamicServerData> getStatusList() {
-        String string_status = getStatusJSON();
-
-        List<DynamicServerData> list = new ArrayList<>();
-
-        if(!string_status.isEmpty()) {
-            JSONObject status = new JSONObject(string_status);
-
-            for(String key : status.keySet()) {
-                JSONObject serverStatus = status.getJSONObject(key);
-                JSONObject serverData = serverStatus.getJSONObject("serverData");
-
-                Gson gson = new Gson();
-                DynamicServerData data = gson.fromJson(serverData.toString(), DynamicServerData.class);
-                list.add( data );
-            }
-        }
-        return list;
-    }
     public DynamicServerData getStatusByServerData(String serverName) {
-         String string_status = getStatusJSON();
-         if(string_status != null) {
-             JSONObject status = new JSONObject(string_status);
+        getStatusJSON().thenApply(string_status -> {
+            if(string_status != null) {
+                JSONObject status = new JSONObject(string_status);
 
-             for(String key :  status.keySet()) {
-                 JSONObject json_serverData = status.getJSONObject(key);
-                 JSONObject serverData = json_serverData.getJSONObject("serverData");
-                 if(serverData.getString("serverName").equals(serverName)) {
-                     Gson gson = new Gson();
-                     return gson.fromJson(serverData.toString(), DynamicServerData.class);
-                 }
-             }
-         }
+                for(String key :  status.keySet()) {
+                    JSONObject json_serverData = status.getJSONObject(key);
+                    JSONObject serverData = json_serverData.getJSONObject("serverData");
+                    if(serverData.getString("serverName").equals(serverName)) {
+                        Gson gson = new Gson();
+                        return gson.fromJson(serverData.toString(), DynamicServerData.class);
+                    }
+                }
+            }
+            return null;
+        });
+
          return null;
     }
 }
