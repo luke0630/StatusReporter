@@ -10,6 +10,7 @@ import org.luke.statusReporter.Data.DynamicServerData;
 import org.luke.statusReporter.Sender;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.luke.takoyakiLibrary.TakoUtility.toColor;
 
@@ -28,12 +29,10 @@ public class CommandManager implements CommandExecutor {
                 commandSender.sendMessage(serverData.getServerName());
             }
         } else {
-            String jsonResponse = getInfo.getStatusJSON();
-            if (jsonResponse != null) {
-                commandSender.sendMessage(jsonResponse);
-            } else {
-                commandSender.sendMessage("Failed to fetch server status.");
-            }
+            getInfo.getStatusJSON().thenApply(jsonResponse -> {
+                commandSender.sendMessage(Objects.requireNonNullElse(jsonResponse, "Failed to fetch server status."));
+                return true;
+            });
         }
         return true;
     }
