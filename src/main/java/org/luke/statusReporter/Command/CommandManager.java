@@ -34,6 +34,19 @@ public class CommandManager implements CommandExecutor {
                 }
             }
         });
+        if(strings[0].equals("list")) {
+            List<DynamicServerData> list = getInfo.getStatusList();
+            for(DynamicServerData serverData : list) {
+                commandSender.sendMessage(serverData.getServerName());
+            }
+        } else {
+            String jsonResponse = getInfo.getStatusJSON();
+            if (jsonResponse != null) {
+                commandSender.sendMessage(jsonResponse);
+            } else {
+                commandSender.sendMessage("Failed to fetch server status.");
+            }
+        }
         return true;
     }
 }
