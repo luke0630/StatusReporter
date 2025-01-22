@@ -14,13 +14,15 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 
 import static org.bukkit.Bukkit.*;
 
 public class Sender {
     private static String myServerName = "";
+    static final Integer timeout = 5;
+    private static HttpClient client = null;
 
-    // 再接続を試みるメソッド
     private static void attemptReconnect() {
         Bukkit.getScheduler().runTaskLaterAsynchronously(StatusReporter.getInstance(), () -> {
             System.out.println("接続を再試行します");
@@ -91,31 +93,39 @@ public class Sender {
 
     public static void Send() {
         String url = String.format("http://%s/status", StatusReporter.address_webServer);
+        isServerOnline(url, timeout).thenAccept(isOnline -> {
+            if(!isOnline) return;
+            try {
+                Gson gson = new Gson();
+                DynamicServerData resultData = new DynamicServerData();
+                resultData.setServerName(myServerName);
+                resultData.setStatus(StatusReporter.getServerStatus());
+                resultData.setPlugins(PluginsInfo.get());
+                resultData.setPlayers(PlayersInfo.get());
 
-        Gson gson = new Gson();
-        DynamicServerData resultData = new DynamicServerData();
-        resultData.setServerName(myServerName);
-        resultData.setStatus(StatusReporter.getServerStatus());
-        resultData.setPlugins(PluginsInfo.get());
-        resultData.setPlayers(PlayersInfo.get());
+                String[] split = StatusReporter.getInstance().getServer().getBukkitVersion().split("-");
+                String version = split[0];
+                resultData.setVersion(version);
 
-        String[] split = StatusReporter.getInstance().getServer().getBukkitVersion().split("-");
-        String version = split[0];
-        resultData.setVersion(version);
+                String jsonPayload = gson.toJson(resultData);
 
-        String jsonPayload = gson.toJson(resultData);
-        try (HttpClient client = HttpClient.newHttpClient()) {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json; charset=UTF-8")
-                    .header("Server-Name", myServerName)
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
-                    .timeout(Duration.ofSeconds(10))
-                    .build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException("Error sending request", e);
-        }
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(url))
+                        .header("Content-Type", "application/json; charset=UTF-8")
+                        .header("Server-Name", myServerName)
+                        .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                        .timeout(Duration.ofSeconds(10))
+                        .build();
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            } catch (IOException e) {
+                getLogger().info("サーバーに接続できませんでした。オフラインの可能性があります。 接続を試みる場合/status reconnect を使用してください  接続先: " + url);
+            } catch (InterruptedException e) {
+                getLogger().info("リクエストが中断されました");
+                getLogger().info("詳細: " + e);
+                attemptReconnect();
+            }
+        });
+    }
 
     public static CompletableFuture<Boolean> isServerOnline(String url, int timeoutSeconds) {
         HttpRequest request = HttpRequest.newBuilder()
