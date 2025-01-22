@@ -15,8 +15,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
-import static org.bukkit.Bukkit.getPort;
-import static org.bukkit.Bukkit.getServer;
+import static org.bukkit.Bukkit.*;
 
 public class Sender {
     private static String myServerName = "";
@@ -64,11 +63,15 @@ public class Sender {
 
             StatusReporter.setWebsocketServerAddress(info);
             StatusReporter.Websocket_ConnectToServer();
-        } catch (IOException | InterruptedException e) {
-            System.out.println(e);
+        } catch (IOException e) {
+            getLogger().info("サーバーに接続できませんでした。オフラインの可能性があります。 接続を試みる場合/status reconnect を使用してください  接続先: " + url);
+        } catch (InterruptedException e) {
+            getLogger().info("リクエストが中断されました");
+            getLogger().info("詳細: " + e);
             attemptReconnect();
         }
     }
+
 
     public static void Send() {
         String url = String.format("http://%s/status", StatusReporter.address_webServer);
