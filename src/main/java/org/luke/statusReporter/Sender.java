@@ -21,6 +21,7 @@ import static org.bukkit.Bukkit.*;
 
 public class Sender {
     private static String myServerName = "";
+    private static String myDisplayServerName = ""; // 表示上の名前
     static final Integer timeout = 5;
     private static HttpClient client = null;
 
@@ -66,6 +67,7 @@ public class Sender {
                         String address = jsonObject.getString("host");
                         Integer port = jsonObject.getInt("port");
                         myServerName = jsonObject.getString("name");
+                        myDisplayServerName = jsonObject.getString("displayName");
 
                         StatusReporter.WebsocketInfo info = new StatusReporter.WebsocketInfo(
                                 address,
@@ -106,6 +108,7 @@ public class Sender {
                 resultData.setStatus(StatusReporter.getServerStatus());
                 resultData.setPlugins(PluginsInfo.get());
                 resultData.setPlayers(PlayersInfo.get());
+            resultData.setDisplayServerName(myDisplayServerName);
 
                 String[] split = StatusReporter.getInstance().getServer().getBukkitVersion().split("-");
                 String version = split[0];

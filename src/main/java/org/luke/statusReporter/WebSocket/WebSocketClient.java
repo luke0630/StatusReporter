@@ -42,6 +42,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
             if(!MessageStatus.getMessageSwitch()) return;
             MessageType type = MessageType.valueOf(split_message[0]);
             String serverName = split_message[1];
+            String serverDisplayName = split_message[2];
 
             // フィルターが有効
             if(MessageStatus.getFilterSwitch()) {
