@@ -15,6 +15,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
 
 import static org.bukkit.Bukkit.*;
 
@@ -23,15 +24,14 @@ public class Sender {
     static final Integer timeout = 5;
     private static HttpClient client = null;
 
-    private static void attemptReconnect() {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(StatusReporter.getInstance(), () -> {
-            System.out.println("接続を再試行します");
-            Register();
-        }, (long) (1.5 * 20L));
-    }
+    static Logger logger;
+    static boolean reconnecting = false;
 
     public static void Register() {
-        System.out.println("接続しています");
+        logger = StatusReporter.getInstance().getLogger();
+        if(!reconnecting) {
+            logger.info("接続しています");
+        }
         String url = String.format("http://%s/register", StatusReporter.address_webServer);
 
         JSONObject serverJSON = new JSONObject();
@@ -52,13 +52,15 @@ public class Sender {
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenAcceptAsync(response -> {
                     try {
-                        Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
-                            getServer().getLogger().info(String.format(
-                                    "%s  %s",
-                                    response.statusCode(),
-                                    response.body()
-                            ));
-                        });
+                        reconnecting = false;
+                        logger.info("接続しました。");
+                        logger.info(
+                                String.format(
+                                        "%s  %s",
+                                        response.statusCode(),
+                                        response.body()
+                                )
+                        );
 
                         JSONObject jsonObject = new JSONObject(response.body());
                         String address = jsonObject.getString("host");
@@ -73,19 +75,21 @@ public class Sender {
                         StatusReporter.setWebsocketServerAddress(info);
                         StatusReporter.Websocket_ConnectToServer();
                     } catch (Exception e) {
-                        Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
-                            getLogger().warning("非同期タスクでエラーが発生しました: " + e.getMessage());
-                        });
+                        logger.warning("非同期タスクでエラーが発生しました: " + e.getMessage());
                     }
                 })
                 .exceptionally(ex -> {
-                    Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
-                        getLogger().info("サーバーに接続できませんでした。詳細: " + ex.getMessage());
-                        getLogger().info("接続先: " + url);
-                    });
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(StatusReporter.getInstance(),
-                            Sender::Register, timeout * 20L
-                    );
+                    if(!reconnecting) {
+                        logger.warning("----------StatusReporter----------");
+                        logger.warning("サーバーに接続できませんでした。詳細: " + ex.getMessage());
+                        logger.warning("接続先: " + url);
+                        logger.warning(timeout + "秒ごとに接続を試みます。");
+                        logger.warning("----------StatusReporter----------");
+                    }
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(StatusReporter.getInstance(), () -> {
+                        reconnecting = true;
+                        Sender.Register();
+                    },timeout * 20L);
                     return null;
                 });
     }
@@ -137,7 +141,6 @@ public class Sender {
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
                     int statusCode = response.statusCode();
-                    System.out.println(statusCode);
                     return statusCode >= 200 && statusCode < 400;
                 })
                 .exceptionally(e -> false);
