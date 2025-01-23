@@ -42,27 +42,27 @@ public class getInfo {
                 });
     }
 
-    public List<DynamicServerData> getStatusList() {
-        getStatusJSON().thenApply(json -> {
+    public CompletableFuture<List<DynamicServerData>> getStatusList() {
+        return getStatusJSON().thenApply(json -> {
             List<DynamicServerData> list = new ArrayList<>();
 
-            if(!json.isEmpty()) {
+            if (json != null && !json.isEmpty()) {
                 JSONObject status = new JSONObject(json);
 
-                for(String key : status.keySet()) {
+                for (String key : status.keySet()) {
                     JSONObject serverStatus = status.getJSONObject(key);
                     JSONObject serverData = serverStatus.getJSONObject("serverData");
 
                     Gson gson = new Gson();
                     DynamicServerData data = gson.fromJson(serverData.toString(), DynamicServerData.class);
-                    list.add( data );
+                    list.add(data);
                 }
             }
             return list;
         });
-        return null;
     }
-    public DynamicServerData getStatusByServerData(String serverName) {
+
+    public CompletableFuture<DynamicServerData> getStatusByServerData(String serverName) {
         getStatusJSON().thenApply(string_status -> {
             if(string_status != null) {
                 JSONObject status = new JSONObject(string_status);
