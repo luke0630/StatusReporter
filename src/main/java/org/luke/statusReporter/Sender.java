@@ -8,7 +8,6 @@ import org.luke.statusReporter.JSON.PlayersInfo;
 import org.luke.statusReporter.JSON.PluginsInfo;
 
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -101,37 +100,29 @@ public class Sender {
         String url = String.format("http://%s/status", StatusReporter.address_webServer);
         isServerOnline(url, timeout).thenAccept(isOnline -> {
             if(!isOnline) return;
-            try {
-                Gson gson = new Gson();
-                DynamicServerData resultData = new DynamicServerData();
-                resultData.setServerName(myServerName);
-                resultData.setStatus(StatusReporter.getServerStatus());
-                resultData.setPlugins(PluginsInfo.get());
-                resultData.setPlayers(PlayersInfo.get());
+            Gson gson = new Gson();
+            DynamicServerData resultData = new DynamicServerData();
+            resultData.setServerName(myServerName);
             resultData.setDisplayServerName(myDisplayServerName);
+            resultData.setStatus(StatusReporter.getServerStatus());
+            resultData.setPlugins(PluginsInfo.get());
+            resultData.setPlayers(PlayersInfo.get());
 
-                String[] split = StatusReporter.getInstance().getServer().getBukkitVersion().split("-");
-                String version = split[0];
-                resultData.setVersion(version);
+            String[] split = StatusReporter.getInstance().getServer().getBukkitVersion().split("-");
+            String version = split[0];
+            resultData.setVersion(version);
 
-                String jsonPayload = gson.toJson(resultData);
+            String jsonPayload = gson.toJson(resultData);
 
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url))
-                        .header("Content-Type", "application/json; charset=UTF-8")
-                        .header("Server-Name", myServerName)
-                        .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
-                        .timeout(Duration.ofSeconds(10))
-                        .build();
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            } catch (IOException e) {
-                getLogger().info("サーバーに接続できませんでした。オフラインの可能性があります。 接続を試みる場合/status reconnect を使用してください  接続先: " + url);
-                Register();
-            } catch (InterruptedException e) {
-                getLogger().info("リクエストが中断されました");
-                getLogger().info("詳細: " + e);
-                Register();
-            }
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json; charset=UTF-8")
+                    .header("Server-Name", myServerName)
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                    .timeout(Duration.ofSeconds(timeout))
+                    .build();
+
+            client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
         });
     }
 
