@@ -21,7 +21,6 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
         STARTED, // 起動済み
         CLOSED,
     }
-    static final double reconnectDuration = 1.5; // second
 
     public WebSocketClient(URI serverUri) {
         super(serverUri);
