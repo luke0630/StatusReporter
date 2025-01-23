@@ -123,6 +123,7 @@ public class Sender {
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             } catch (IOException e) {
                 getLogger().info("サーバーに接続できませんでした。オフラインの可能性があります。 接続を試みる場合/status reconnect を使用してください  接続先: " + url);
+                Register();
             } catch (InterruptedException e) {
                 getLogger().info("リクエストが中断されました");
                 getLogger().info("詳細: " + e);
