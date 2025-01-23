@@ -36,7 +36,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
     @Override
     public void onMessage(String message) {
         String[] split_message = message.split(" ");
-        if(split_message.length == 2) {
+        if(split_message.length >= 2) {
             ConfigData.MessageStatus MessageStatus = StatusReporter.getData().getMessageStatus();
 
             if(!MessageStatus.getMessageSwitch()) return;
@@ -50,9 +50,8 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
             }
 
             String statusMessage = getStatusMessage(type);
-            getServer().broadcastMessage(TakoUtility.toColor(String.format(statusMessage, serverName)));
-        }
-        if(message.equals("send")) {
+            getServer().broadcastMessage(TakoUtility.toColor(String.format(statusMessage, serverDisplayName)));
+        } else if(message.equals("send")) {
             Sender.Send();
         }
     }
