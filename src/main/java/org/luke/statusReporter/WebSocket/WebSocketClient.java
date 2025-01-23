@@ -29,7 +29,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake serverHandshake) {
-        System.out.println("サーバーに接続しました");
+        StatusReporter.getInstance().getLogger().info("websocketサーバーに接続しました。");
 
         Register();
     }
@@ -80,7 +80,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        System.out.println("Closed connection: " + reason);
+        StatusReporter.getInstance().getLogger().info("Closed connection: " + reason);
 
         Sender.Register();
     }
@@ -97,7 +97,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
             getLogger().info(type + " " + message);
             send(jsonObject.toString());
         } else {
-            System.out.println("Connection is not open. Unable to send message.");
+            StatusReporter.getInstance().getLogger().info("Connection is not open. Unable to send message.");
         }
     }
 
