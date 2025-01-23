@@ -127,7 +127,7 @@ public class Sender {
             } catch (InterruptedException e) {
                 getLogger().info("リクエストが中断されました");
                 getLogger().info("詳細: " + e);
-                attemptReconnect();
+                Register();
             }
         });
     }
