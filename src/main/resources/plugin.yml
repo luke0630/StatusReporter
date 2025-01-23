@@ -1,5 +1,5 @@
 name: StatusReporter
-version: '1.0'
+version: '1.0.0'
 main: org.luke.statusReporter.StatusReporter
 description: Report status to ServerManager plugin
 api-version: '1.21'
