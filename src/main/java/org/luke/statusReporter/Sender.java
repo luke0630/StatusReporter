@@ -67,13 +67,16 @@ public class Sender {
                             Integer port = jsonObject.getInt("port");
                             myServerName = jsonObject.getString("name");
 
-                        StatusReporter.WebsocketInfo info = new StatusReporter.WebsocketInfo(
-                                address,
-                                port
-                        );
+                            StatusReporter.WebsocketInfo info = new StatusReporter.WebsocketInfo(
+                                    address,
+                                    port
+                            );
 
-                        StatusReporter.setWebsocketServerAddress(info);
-                        StatusReporter.Websocket_ConnectToServer();
+                            StatusReporter.setWebsocketServerAddress(info);
+                            StatusReporter.Websocket_ConnectToServer();
+                        } else if(response.statusCode() == 400) {
+                            logger.warning("サーバーリストにこのサーバーアドレスは存在しなかったため認証されませんでした。");
+                        }
                     } catch (Exception e) {
                         logger.warning("非同期タスクでエラーが発生しました: " + e.getMessage());
                     }
