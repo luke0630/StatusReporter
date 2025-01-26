@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import org.json.JSONObject;
 import org.luke.statusReporter.Command.CommandManager;
 import org.luke.statusReporter.Data.ConfigData;
 import org.luke.statusReporter.Placeholder.StatusExpansion;
@@ -56,7 +57,7 @@ public final class StatusReporter extends JavaPlugin {
         getServer().getScheduler().runTask(this, () -> {
             setServerStatus(ServerStatus.RUNNING);
             if(webSocketClient != null) {
-                webSocketClient.sendMessageToServer(WebSocketClient.MessageType.STARTED, "");
+                webSocketClient.sendMessageToServer(WebSocketClient.MessageType.STARTED, new JSONObject());
             }
 
             if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
