@@ -105,7 +105,6 @@ public class Sender {
             Gson gson = new Gson();
             DynamicServerData resultData = new DynamicServerData();
             resultData.setServerName(myServerName);
-            resultData.setDisplayServerName(myDisplayServerName);
             resultData.setStatus(StatusReporter.getServerStatus());
             resultData.setPlugins(PluginsInfo.get());
             resultData.setPlayers(PlayersInfo.get());
