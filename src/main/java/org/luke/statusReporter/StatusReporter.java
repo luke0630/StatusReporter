@@ -83,7 +83,6 @@ public final class StatusReporter extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
         if(webSocketClient != null) {
             webSocketClient.close();
             webSocketClient = null;
