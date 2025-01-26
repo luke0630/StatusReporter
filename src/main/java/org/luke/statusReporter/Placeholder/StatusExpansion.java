@@ -35,6 +35,10 @@ public class StatusExpansion extends PlaceholderExpansion {
             for (String serverName : status.keySet()) {
                 if (serverName.equals(args[0])) {
                     JSONObject serverStatus = status.getJSONObject(serverName);
+            String serverName = args[0];
+            for (String serverNameKey : status.keySet()) {
+                if (serverNameKey.equals(serverName)) {
+                    JSONObject serverStatus = status.getJSONObject(serverNameKey);
                     if (serverStatus.getBoolean("isOnline")) {
                         DynamicServerData serverData = new Gson().fromJson(serverStatus.getJSONObject("serverData").toString(), DynamicServerData.class);
                         return getStatus(serverData, args);
