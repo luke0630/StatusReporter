@@ -61,11 +61,6 @@ public class Sender {
                                 )
                         );
 
-                        JSONObject jsonObject = new JSONObject(response.body());
-                        String address = jsonObject.getString("host");
-                        Integer port = jsonObject.getInt("port");
-                        myServerName = jsonObject.getString("name");
-                        myDisplayServerName = jsonObject.getString("displayName");
                         if(response.statusCode() == 200) {
                             JSONObject jsonObject = new JSONObject(response.body());
                             String address = jsonObject.getString("host");
