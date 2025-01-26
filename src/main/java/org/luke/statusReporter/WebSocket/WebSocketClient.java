@@ -80,8 +80,6 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         StatusReporter.getInstance().getLogger().info("Closed connection: " + reason);
-
-        Sender.Register();
     }
 
     @Override
