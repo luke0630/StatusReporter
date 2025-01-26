@@ -78,7 +78,7 @@ public class Sender {
                             logger.warning("サーバーリストにこのサーバーアドレスは存在しなかったため認証されませんでした。");
                         }
                     } catch (Exception e) {
-                        logger.warning("非同期タスクでエラーが発生しました: " + e.getMessage());
+                        logger.warning("エラーが発生しました: " + e.getMessage());
                     }
                 })
                 .exceptionally(ex -> {
