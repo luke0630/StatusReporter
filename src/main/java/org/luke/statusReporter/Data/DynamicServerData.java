@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 public class DynamicServerData {
     private String serverName = "";
-    private String displayServerName = "";
     private StatusReporter.ServerStatus status;
     private String version;
     private List<PluginInfo> plugins;

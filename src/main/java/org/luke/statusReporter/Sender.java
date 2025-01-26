@@ -20,7 +20,6 @@ import static org.bukkit.Bukkit.*;
 
 public class Sender {
     private static String myServerName = "";
-    private static String myDisplayServerName = ""; // 表示上の名前
     static final Integer timeout = 5;
     private static HttpClient client = null;
 
@@ -67,6 +66,11 @@ public class Sender {
                         Integer port = jsonObject.getInt("port");
                         myServerName = jsonObject.getString("name");
                         myDisplayServerName = jsonObject.getString("displayName");
+                        if(response.statusCode() == 200) {
+                            JSONObject jsonObject = new JSONObject(response.body());
+                            String address = jsonObject.getString("host");
+                            Integer port = jsonObject.getInt("port");
+                            myServerName = jsonObject.getString("name");
 
                         StatusReporter.WebsocketInfo info = new StatusReporter.WebsocketInfo(
                                 address,
