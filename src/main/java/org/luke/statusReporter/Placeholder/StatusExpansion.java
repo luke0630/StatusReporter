@@ -45,7 +45,9 @@ public class StatusExpansion extends PlaceholderExpansion {
                     }
                 }
             }
-            return "そのサーバーは存在しません。";
+            return String.format("サーバー、'%s'は存在しません。",
+                serverName
+            );
         } catch (Exception e) {
             return "エラーが発生しました: " + e.getMessage();
         }
