@@ -60,14 +60,12 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
         ConfigData.MessageData messageData = StatusReporter.getData().getMessageStatus().getMessageData();
         if(type == MessageType.STARTED) {
             for(Player player : Bukkit.getOnlinePlayers()) {
-                Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> {
-                    player.getWorld().playSound(
-                            player.getLocation(),
-                            Sound.ENTITY_PLAYER_LEVELUP,
-                            1,
-                            1
-                    );
-                });
+                Bukkit.getScheduler().runTask(StatusReporter.getInstance(), () -> player.getWorld().playSound(
+                        player.getLocation(),
+                        Sound.ENTITY_PLAYER_LEVELUP,
+                        1,
+                        1
+                ));
             }
         }
         return switch(type) {
@@ -86,12 +84,12 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
     public void onError(Exception ex) {
 
     }
-    public void sendMessageToServer(MessageType type, String message) {
+    public void sendMessageToServer(MessageType type, JSONObject message) {
         if (isOpen()) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("type", type.name());
             jsonObject.put("content", message);
-            getLogger().info(type + " " + message);
+            getLogger().info(jsonObject.toString());
             send(jsonObject.toString());
         } else {
             StatusReporter.getInstance().getLogger().info("Connection is not open. Unable to send message.");
@@ -101,6 +99,6 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
     public void Register() {
         JSONObject json = new JSONObject();
         json.put("port", getServer().getPort());
-        sendMessageToServer(MessageType.REGISTER, json.toString());
+        sendMessageToServer(MessageType.REGISTER, json);
     }
 }
