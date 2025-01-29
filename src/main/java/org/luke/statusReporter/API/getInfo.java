@@ -19,7 +19,7 @@ public class getInfo {
     public CompletableFuture<String> getStatusJSON() {
         HttpClient client = HttpClient.newHttpClient();
 
-        String url = String.format("http://%s/status", StatusReporter.address_webServer);
+        String url = String.format("http://%s/api/status", StatusReporter.address_webServer);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .build();
