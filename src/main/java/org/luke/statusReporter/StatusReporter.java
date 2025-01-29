@@ -58,6 +58,7 @@ public final class StatusReporter extends JavaPlugin {
             setServerStatus(ServerStatus.RUNNING);
             if(webSocketClient != null) {
                 webSocketClient.sendMessageToServer(WebSocketClient.MessageType.STARTED, new JSONObject());
+                webSocketClient.sendMessage(MessageType.MessageClient.STARTED, new JSONObject());
             }
 
             if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
