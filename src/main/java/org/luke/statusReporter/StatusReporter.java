@@ -36,12 +36,9 @@ public final class StatusReporter extends JavaPlugin {
         RUNNING, // 起動完了（動作中）
     }
 
+    @Setter
     @Getter
     private static ServerStatus serverStatus = ServerStatus.STARTING;
-    public static void setServerStatus(ServerStatus status) {
-        serverStatus = status;
-        Sender.Send();
-    }
 
     @Override
     public void onEnable() {
