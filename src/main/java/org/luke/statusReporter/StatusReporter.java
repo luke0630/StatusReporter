@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONObject;
 import org.luke.statusReporter.Command.CommandManager;
 import org.luke.statusReporter.Data.ConfigData;
+import org.luke.statusReporter.Data.Message.MessageType;
 import org.luke.statusReporter.Placeholder.StatusExpansion;
 import org.luke.statusReporter.WebSocket.WebSocketClient;
 
