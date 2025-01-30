@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import static org.bukkit.Bukkit.*;
 
 public class Sender {
-    private static String myServerName = "";
+    public static String myServerName = "";
     static final Integer timeout = 5;
     private static HttpClient client = null;
 
