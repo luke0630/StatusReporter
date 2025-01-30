@@ -11,7 +11,7 @@ import org.luke.statusReporter.Command.CommandManager;
 import org.luke.statusReporter.Data.ConfigData;
 import org.luke.statusReporter.Data.Message.MessageType;
 import org.luke.statusReporter.Placeholder.StatusExpansion;
-import org.luke.statusReporter.WebSocket.WebSocketClient;
+import org.luke.statusReporter.WebSocket.MyWebsocketClient;
 
 import java.net.URI;
 import java.util.Objects;
@@ -30,7 +30,7 @@ public final class StatusReporter extends JavaPlugin {
     private static WebsocketInfo websocketServerAddress;
 
     @Getter
-    private static WebSocketClient webSocketClient;
+    private static MyWebsocketClient webSocketClient;
 
     public enum ServerStatus {
         STARTING, // サーバーが起動中
@@ -73,7 +73,7 @@ public final class StatusReporter extends JavaPlugin {
             }
             StatusReporter.WebsocketInfo info = StatusReporter.getWebsocketServerAddress();
             URI serverUri = new URI(String.format("ws://%s:%d", info.host(), info.port()));
-            webSocketClient = new WebSocketClient(serverUri);
+            webSocketClient = new MyWebsocketClient(serverUri);
             webSocketClient.setConnectionLostTimeout(300);
             webSocketClient.connect();
         } catch (Exception e) {
