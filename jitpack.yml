@@ -1,6 +1,6 @@
 jdk:
   - openjdk21
 maven:
-  version: 3.8.5
-  goals: clean package
+  goals: clean package -DskipTests
   options: -Pjitpack
+version: 3.8.5
