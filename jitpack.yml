@@ -3,4 +3,4 @@ jdk:
 maven:
   version: 3.8.5
   goals: clean install
-  options: -P jitpack
+  options: -Pjitpack
