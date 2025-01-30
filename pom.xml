@@ -4,13 +4,55 @@
 
     <groupId>org.luke.statusreporter</groupId>
     <artifactId>statusreporter</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
 
     <properties>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <relocation.package>${project.groupId}.${project.artifactId}.packages.</relocation.package>
     </properties>
+
+    <profiles>
+        <!-- JitPack用のプロファイル -->
+        <profile>
+            <id>jitpack</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>jitpack</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>3.2.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <filters>
+                                        <filter>
+                                            <artifact>*:*</artifact>
+                                            <includes>
+                                                <include>org.luke.statusReporter.API.getInfo</include>
+                                                <include>org.luke.statusReporter.Data.DynamicServerData</include>
+                                            </includes>
+                                        </filter>
+                                    </filters>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
