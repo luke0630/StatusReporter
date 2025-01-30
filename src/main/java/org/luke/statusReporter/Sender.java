@@ -31,7 +31,7 @@ public class Sender {
         if(!reconnecting) {
             logger.info("接続しています");
         }
-        String url = String.format("http://%s/register", StatusReporter.address_webServer);
+        String url = String.format("http://%s/websocket-address", StatusReporter.address_webServer);
 
         JSONObject serverJSON = new JSONObject();
         serverJSON.put("port", getPort());
