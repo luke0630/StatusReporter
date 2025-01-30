@@ -22,8 +22,8 @@ import java.net.URI;
 import static org.bukkit.Bukkit.getServer;
 import static org.luke.statusReporter.Sender.myServerName;
 
-public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
-    public WebSocketClient(URI serverUri) {
+public class MyWebsocketClient extends org.java_websocket.client.WebSocketClient {
+    public MyWebsocketClient(URI serverUri) {
         super(serverUri);
     }
 
