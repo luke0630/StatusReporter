@@ -2,5 +2,5 @@ jdk:
   - openjdk21
 maven:
   version: 3.8.5
-  goals: clean install
+  goals: clean package
   options: -Pjitpack
