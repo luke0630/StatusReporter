@@ -11,11 +11,11 @@ import static org.luke.statusReporter.StatusReporter.*;
 public class EventManager implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        getServer().getScheduler().runTask(getInstance(), Sender::Send);
+        getServer().getScheduler().runTask(getInstance(), StatusReporter.getWebSocketClient()::SendInfo);
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        getServer().getScheduler().runTask(getInstance(), Sender::Send);
+        getServer().getScheduler().runTask(getInstance(), StatusReporter.getWebSocketClient()::SendInfo);
     }
 }
