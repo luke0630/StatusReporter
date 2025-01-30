@@ -65,7 +65,6 @@ public class Sender {
                             JSONObject jsonObject = new JSONObject(response.body());
                             String address = jsonObject.getString("host");
                             Integer port = jsonObject.getInt("port");
-                            myServerName = jsonObject.getString("name");
 
                             StatusReporter.WebsocketInfo info = new StatusReporter.WebsocketInfo(
                                     address,
