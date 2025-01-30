@@ -97,36 +97,6 @@ public class Sender {
                 });
     }
 
-
-    public static void Send() {
-        String url = String.format("http://%s/status", StatusReporter.address_webServer);
-        isServerOnline(url, timeout).thenAccept(isOnline -> {
-            if(!isOnline) return;
-            Gson gson = new Gson();
-            DynamicServerData resultData = new DynamicServerData();
-            resultData.setServerName(myServerName);
-            resultData.setStatus(StatusReporter.getServerStatus());
-            resultData.setPlugins(PluginsInfo.get());
-            resultData.setPlayers(PlayersInfo.get());
-
-            String[] split = StatusReporter.getInstance().getServer().getBukkitVersion().split("-");
-            String version = split[0];
-            resultData.setVersion(version);
-
-            String jsonPayload = gson.toJson(resultData);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json; charset=UTF-8")
-                    .header("Server-Name", myServerName)
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
-                    .timeout(Duration.ofSeconds(timeout))
-                    .build();
-
-            client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-        });
-    }
-
     public static CompletableFuture<Boolean> isServerOnline(String url, int timeoutSeconds) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
