@@ -122,8 +122,10 @@
                                         <filter>
                                             <artifact>*:*</artifact>
                                             <includes>
-                                                <include>org/luke/statusReporter/API/*</include>
+                                                <include>org/luke/statusReporter/API/getInfo.class</include>
                                                 <include>org/luke/statusReporter/Data/DynamicServerData.class</include>
+                                                <include>org/luke/statusReporter/Data/Message/**</include>
+                                                <include>org/luke/statusReporter/Utility/**</include>
                                             </includes>
                                         </filter>
                                     </filters>
