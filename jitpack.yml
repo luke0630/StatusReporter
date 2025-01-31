@@ -3,6 +3,5 @@ jdk:
 maven:
   version: 3.8.5
 
-build:
-  script:
-    - mvn -Pjitpack clean install
+install:
+  - mvn clean install -Pjitpack
