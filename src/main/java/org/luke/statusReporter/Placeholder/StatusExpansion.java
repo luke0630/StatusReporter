@@ -62,9 +62,19 @@ public class StatusExpansion extends PlaceholderExpansion {
                 default -> "";
             };
         } else if(args.length == 2) {
+            var placeholder = StatusReporter.getData().getPlaceholderMessage();
+
+            String playerscount = String.format(
+                    placeholder.getOnline_playerscount(),
+                    serverStatus.getPlayers().size()
+            );
+            String version = String.format(
+                    placeholder.getOnline_version(),
+                    serverStatus.getVersion()
+            );
             return switch(args[1]) {
-                case "playerscount" -> String.valueOf(serverStatus.getPlayers().size());
-                case "version" -> serverStatus.getVersion();
+                case "playerscount" ->  playerscount;
+                case "version" -> version;
                 default -> "";
             };
         }

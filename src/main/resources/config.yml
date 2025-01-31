@@ -1,9 +1,11 @@
-address: localhost:8888
+address: localhost:8844
 
 placeholder-message:
+  starting: "&6起動中"
   online:
     status: "&a&lオンライン (稼働中)"
-    starting: "&6起動中"
+    playerscount: "&f&l参加人数: &b&l%s人"
+    version: "&f&lバージョン: &b&l%s"
   offline:
     status: "&6オフライン (停止中)"
 

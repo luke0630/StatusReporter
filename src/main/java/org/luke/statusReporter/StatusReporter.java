@@ -116,11 +116,16 @@ public final class StatusReporter extends JavaPlugin {
         //////////// PlaceholderMessage ////////////
         ConfigData.PlaceholderMessage placeholderMessage = new ConfigData.PlaceholderMessage();
 
+        placeholderMessage.setStarting(config.getString(placeholderMessagePath + "starting"));
+
         String online_path = placeholderMessagePath + "online.";
         String offline_path = placeholderMessagePath + "offline.";
         placeholderMessage.setStatus_online(config.getString(online_path + "status"));
-        placeholderMessage.setStarting(config.getString(online_path + "starting"));
         placeholderMessage.setStatus_offline(config.getString(offline_path + "status"));
+
+        placeholderMessage.setOnline_playerscount(config.getString(online_path + "playerscount"));
+        placeholderMessage.setOnline_version(config.getString(online_path + "version"));
+
         //////////// PlaceholderMessage ////////////
 
         configData.setMessageStatus(messageStatus);

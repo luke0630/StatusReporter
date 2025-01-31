@@ -26,6 +26,8 @@ public class ConfigData {
         String status_online;
         String status_offline;
         String starting;
+        String online_playerscount;
+        String online_version;
     }
 
     @Getter
