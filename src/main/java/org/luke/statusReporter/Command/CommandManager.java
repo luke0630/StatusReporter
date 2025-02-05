@@ -5,7 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.luke.statusReporter.API.getInfo;
-import org.luke.statusReporter.Data.DynamicServerData;
+import org.manager.Library.Data.DynamicServerData;
 
 import java.util.Objects;
 

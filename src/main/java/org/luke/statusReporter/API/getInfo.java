@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import lombok.experimental.UtilityClass;
 import org.json.JSONObject;
 import org.luke.statusReporter.StatusReporter;
-import org.luke.statusReporter.Data.DynamicServerData;
+import org.manager.Library.Data.DynamicServerData;
 
 import java.net.URI;
 import java.net.http.HttpClient;

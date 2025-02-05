@@ -9,9 +9,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONObject;
 import org.luke.statusReporter.Command.CommandManager;
 import org.luke.statusReporter.Data.ConfigData;
-import org.luke.statusReporter.Data.Message.MessageType;
 import org.luke.statusReporter.Placeholder.StatusExpansion;
 import org.luke.statusReporter.WebSocket.MyWebsocketClient;
+import org.manager.Library.Data.DynamicServerData;
+import org.manager.Library.Data.Message.MessageType;
 
 import java.net.URI;
 import java.util.Objects;
@@ -32,14 +33,9 @@ public final class StatusReporter extends JavaPlugin {
     @Getter
     private static MyWebsocketClient webSocketClient;
 
-    public enum ServerStatus {
-        STARTING, // サーバーが起動中
-        RUNNING, // 起動完了（動作中）
-    }
-
     @Setter
     @Getter
-    private static ServerStatus serverStatus = ServerStatus.STARTING;
+    private static DynamicServerData.ServerStatus serverStatus = DynamicServerData.ServerStatus.STARTING;
 
     @Override
     public void onEnable() {
@@ -53,7 +49,7 @@ public final class StatusReporter extends JavaPlugin {
         Objects.requireNonNull(getServer().getPluginCommand("statusreporter")).setExecutor(new CommandManager());
 
         getServer().getScheduler().runTask(this, () -> {
-            setServerStatus(ServerStatus.RUNNING);
+            setServerStatus(DynamicServerData.ServerStatus.RUNNING);
             if(webSocketClient != null) {
                 webSocketClient.sendMessage(MessageType.MessageClient.STARTED, new JSONObject());
                 webSocketClient.SendInfo();

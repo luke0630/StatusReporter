@@ -7,15 +7,15 @@ import org.bukkit.entity.Player;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 import org.luke.statusReporter.Data.ConfigData;
-import org.luke.statusReporter.Data.DynamicServerData;
-import org.luke.statusReporter.Data.Message.MessageDataServer;
-import org.luke.statusReporter.Data.Message.MessageType;
 import org.luke.statusReporter.JSON.PlayersInfo;
 import org.luke.statusReporter.JSON.PluginsInfo;
 import org.luke.statusReporter.Sender;
 import org.luke.statusReporter.StatusReporter;
-import org.luke.statusReporter.Utility.MessageUtility;
 import org.luke.takoyakiLibrary.TakoUtility;
+import org.manager.Library.Data.DynamicServerData;
+import org.manager.Library.Data.Message.MessageDataServer;
+import org.manager.Library.Data.Message.MessageType;
+import org.manager.Library.Utility.MessageUtility;
 
 import java.net.URI;
 
