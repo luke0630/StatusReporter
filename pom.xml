@@ -196,9 +196,9 @@
             <version>3.8</version>
         </dependency>
         <dependency>
-            <groupId>org.manager</groupId>
+            <groupId>com.github.luke0630</groupId>
             <artifactId>MinecraftServerManager</artifactId>
-            <version>1.0.0</version>
+            <version>2ddc0056e8</version>
         </dependency>
     </dependencies>
 </project>
