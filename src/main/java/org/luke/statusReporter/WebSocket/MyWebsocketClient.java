@@ -47,8 +47,11 @@ public class MyWebsocketClient extends org.java_websocket.client.WebSocketClient
                 myServerName = jsonObject.getString("name");
                 SendInfo();
                 break;
-            case SEND_INFO :
+            case SEND_INFO:
                 SendInfo();
+                break;
+            case SEND_ALL_PLAYERS:
+                SendAllPlayers();
                 break;
             case UPDATE_INFO:
                 // データが更新された
