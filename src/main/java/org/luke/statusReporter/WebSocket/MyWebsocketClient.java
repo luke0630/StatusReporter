@@ -139,4 +139,11 @@ public class MyWebsocketClient extends org.java_websocket.client.WebSocketClient
 
         sendMessage(MessageType.MessageClient.SEND_INFO, new JSONObject(jsonPayload));
     }
+    public void SendAllPlayers() {
+        JSONObject json_players = new JSONObject();
+        for(OfflinePlayer player : Bukkit.getOfflinePlayers()) {
+            json_players.put(player.getUniqueId().toString(), player.getName());
+        }
+        sendMessage(MessageType.MessageClient.SEND_ALL_PLAYERS, json_players);
+    }
 }
